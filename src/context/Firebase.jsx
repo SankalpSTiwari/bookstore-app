@@ -14,7 +14,7 @@ const firebaseConfig = {
   measurementId: 'G-18PMMV0NB7',
 };
 
-export const useFirebase = useContext(FirebaseContext);
+export const useFirebase = () => useContext(FirebaseContext);
 
 const firebaseApp = initializeApp(firebaseConfig);
 
