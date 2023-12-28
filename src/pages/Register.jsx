@@ -1,29 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-const RegisterPage = () => {
-  return (
-    <Form>
-      <Form.Group className='mb-3' controlId='formBasicEmail'>
-        <Form.Label>Email address</Form.Label>
-        <Form.Control type='email' placeholder='Enter email' />
-        <Form.Text className='text-muted'>
-          We'll never share your email with anyone else.
-        </Form.Text>
-      </Form.Group>
+import { useFirebase } from '../context/Firebase';
 
-      <Form.Group className='mb-3' controlId='formBasicPassword'>
-        <Form.Label>Password</Form.Label>
-        <Form.Control type='password' placeholder='Password' />
-      </Form.Group>
-      <Form.Group className='mb-3' controlId='formBasicCheckbox'>
-        <Form.Check type='checkbox' label='Check me out' />
-      </Form.Group>
-      <Button variant='primary' type='submit'>
-        Submit
-      </Button>
-    </Form>
+const RegisterPage = () => {
+  const firebase = useFirebase();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Used to prevent page from reloading after onSubmit will be clicked
+    console.log('Signing up a user...');
+    const result = await firebase.signupUserWithEmailAndPassword(
+      email,
+      password
+    );
+    console.log('Successful');
+  };
+
+  console.log(firebase);
+
+  return (
+    <div className='container mt-5'>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className='mb-3' controlId='formBasicEmail'>
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            type='email'
+            placeholder='Enter email'
+          />
+          <Form.Text className='text-muted'>
+            We'll never share your email with anyone else.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group className='mb-3' controlId='formBasicPassword'>
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            type='password'
+            placeholder='Password'
+          />
+        </Form.Group>
+        <Button variant='primary' type='submit'>
+          Create Account
+        </Button>
+      </Form>
+    </div>
   );
 };
 
