@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -6,9 +7,17 @@ import { useFirebase } from '../context/Firebase';
 
 const RegisterPage = () => {
   const firebase = useFirebase();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (firebase.isLoggedIn) {
+      // navigate to home
+      navigate('/');
+    }
+  }, [firebase, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Used to prevent page from reloading after onSubmit will be clicked
