@@ -34,7 +34,6 @@ const LoginPage = () => {
             placeholder='Enter email'
           />
         </Form.Group>
-
         <Form.Group className='mb-3' controlId='formBasicPassword'>
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -47,6 +46,13 @@ const LoginPage = () => {
         <Button variant='primary' type='submit'>
           Login
         </Button>
+        <Button
+          style={{ marginLeft: '5px' }}
+          variant='danger'
+          onClick={firebase.signinWithGoogle}
+        >
+          Signin with google
+        </Button>{' '}
       </Form>
     </div>
   );
