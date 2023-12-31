@@ -8,7 +8,14 @@ import {
   signInWithPopup,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  getDoc,
+  doc,
+} from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 const FirebaseContext = createContext(null);
 
@@ -72,8 +79,25 @@ export const FirebaseProvider = (props) => {
     return getDocs(collection(firestore, 'books'));
   };
 
+  const getBookById = async (id) => {
+    const docRef = doc(firestore, 'books', id);
+    const result = await getDoc(docRef);
+    return result;
+  };
+
   const getImageURL = (path) => {
     return getDownloadURL(ref(storage, path));
+  };
+
+  const placeOrder = async (bookId) => {
+    const collectionRef = collection(firestore, 'books', bookId, 'orders');
+    const result = await addDoc(collectionRef, {
+      username: user.displayName,
+      userID: user.uid,
+      userEmail: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+    });
   };
   const isLoggedIn = user ? true : false;
 
@@ -86,6 +110,7 @@ export const FirebaseProvider = (props) => {
         handleCreateNewListing,
         listAllBooks,
         getImageURL,
+        getBookById,
         isLoggedIn,
       }}
     >
